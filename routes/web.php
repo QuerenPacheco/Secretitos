@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+/*
+Route::group([
+
+    'middleware' => 'web',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'auth'
+    
+    ], function ($router) {
+        Route::get('/test', 'AuthController@test');
+    }
+);*/
