@@ -31,14 +31,17 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/index', [SecretoController::class, 'index']);
-Route::post('createSecret', [SecretoController::class, 'store'])->name('createSecret');
 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/index', [SecretoController::class, 'index']);
+    Route::post('createSecret', [SecretoController::class, 'store'])->name('createSecret');
+    Route::get('showSecret/{id}', [SecretoController::class, 'show'])->name('showSecret');
+    Route::delete('deleteSecret/{id}', [SecretoController::class, 'destroy'])->name('deleteSecret');
 });
 
 require __DIR__.'/auth.php';

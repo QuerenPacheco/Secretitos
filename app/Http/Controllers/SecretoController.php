@@ -9,10 +9,10 @@ use App\Providers\RouteServiceProvider;
 
 class SecretoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $secrets = Secreto::all();
-        return response()->json($secrets);
+        $secretTitles= Secreto::where('user_id', $request->user()->id)->select('id', 'title')->get();
+        return response()->json($secretTitles);
     }
 
     public function create(): Response
@@ -32,40 +32,25 @@ class SecretoController extends Controller
             'content' => $request->content,
             'user_id' => $request->user()->id,
         ]);
-        // $secreto = Secreto::create($request->all());
-        // return response()->json($request->user()->id);
         return redirect(RouteServiceProvider::HOME)
             ->with('success', 'Post creado exitosamente.');
     }
 
-    public function show(Post $post)
+    public function show(Request $request, $id)
     {
-        return view('posts.show', compact('post'));
+        $secretContent= Secreto::where('id', $id)
+                                ->where('user_id', $request->user()->id)
+                                ->pluck('content')[0];
+        return response()->json($secretContent);
     }
 
-    public function edit(Post $post)
+   
+    public function destroy(Request $request, $id)
     {
-        return view('posts.edit', compact('post'));
-    }
+        $secretDelete= Secreto::where('id', $request->id)
+                                ->where('user_id', $request->user()->id);
+        $secretDelete->delete();
 
-    public function update(Request $request, Post $post)
-    {
-        $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-        ]);
-
-        $post->update($request->all());
-
-        return redirect()->route('posts.index')
-            ->with('success', 'Post actualizado exitosamente.');
-    }
-
-    public function destroy(Post $post)
-    {
-        $post->delete();
-
-        return redirect()->route('posts.index')
-            ->with('success', 'Post eliminado exitosamente.');
+        return response()->json('💥 El secreto se ha autodestruido 💥');
     }
 }
