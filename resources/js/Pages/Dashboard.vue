@@ -3,11 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue'
-// import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
-import TextareaInput from '@/Components/TextareaInput.vue';
 import SecretsTable from '@/Components/SecretsTable.vue';
+import SecretsModalCreate from '@/Components/SecretsModalCreate.vue';
+
 
 const showModal = ref(false);
 const secrets = ref();
@@ -27,20 +25,20 @@ const closeModal = () => {
     showModal.value = false;
 };
 
-const submit = () => {
-    form.post(route('createSecret'), {
-        onFinish: () => {
-            form.title = "";
-            form.content = "";
-            closeModal(); 
-            charge();
-            },
-    });
-};
+// const submit = () => {
+//     form.post(route('createSecret'), {
+//         onFinish: () => {
+//             form.title = "";
+//             form.content = "";
+//             closeModal(); 
+//             charge();
+//             },
+//     });
+// };
 
 
 const showSecret = (id) => {
-    fetch('/showSecret/'+id, {
+    fetch('/showSecret/' + id, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -49,8 +47,8 @@ const showSecret = (id) => {
         .then(response => response.json())
         .then(data => {
             secrets.value = secrets.value.map(sec => {
-                if(sec.id == id){
-                    return {...sec, content:data}
+                if (sec.id == id) {
+                    return { ...sec, content: data }
                 }
                 return sec
             });
@@ -65,49 +63,49 @@ const showSecret = (id) => {
 };
 
 const destructSecret = (id) => {
-    fetch('/deleteSecret/'+id, {
-    method: 'DELETE',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-})
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error en la solicitud');
-        }
-        return response.json();
+    fetch('/deleteSecret/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
-    .then(data => {
-        charge()
-        var successModal = document.querySelector("#successModal")
-        var message = document.createElement('p')
-        message.textContent=data
-        successModal.append(message)
-        successModal.style.display="block"
-        setTimeout(() => {
-            successModal.textContent = ''
-            successModal.style.display="none"
-        }, 4000);
-    })
-    .catch(error => {
-        console.error('Error en la solicitud DELETE:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la solicitud');
+            }
+            return response.json();
+        })
+        .then(data => {
+            charge()
+            var successModal = document.querySelector("#successModal")
+            var message = document.createElement('p')
+            message.textContent = data
+            successModal.append(message)
+            successModal.style.display = "block"
+            setTimeout(() => {
+                successModal.textContent = ''
+                successModal.style.display = "none"
+            }, 4000);
+        })
+        .catch(error => {
+            console.error('Error en la solicitud DELETE:', error);
+        });
 }
 
-const charge = ()=>{
+const charge = () => {
     fetch('/index', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
-    .then(response => response.json())
-    .then(data => {
-        secrets.value = data.map((obj)=>({...obj, content:'*****'}))
-    })
-    .catch(error => {
-        console.error('Error al realizar la solicitud:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            secrets.value = data.map((obj) => ({ ...obj, content: '*****' }))
+        })
+        .catch(error => {
+            console.error('Error al realizar la solicitud:', error);
+        });
 }
 onMounted(charge)
 
@@ -122,7 +120,9 @@ onMounted(charge)
         </template>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div id="successModal" class ="text-xl text-gray-700 uppercase text-center bg-gray-50 dark:bg-red-500 dark:text-white mb-4 sm:rounded-lg"></div>
+                <div id="successModal"
+                    class="text-xl text-gray-700 uppercase text-center bg-gray-50 dark:bg-red-500 dark:text-white mb-4 sm:rounded-lg">
+                </div>
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
@@ -133,33 +133,10 @@ onMounted(charge)
                                     Crear secreto
                                 </PrimaryButton>
                             </div>
-                            <div v-if="showModal" class="modal">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <span class="close" @click="closeModal">&times;</span>
-                                        <h2>Crear un nuevo secreto</h2>
-                                    </div>
+                            <SecretsModalCreate :isOpen="showModal" :onSubmit="charge" :onClose="closeModal" />
 
-                                    <form @submit.prevent="submit">
-                                        <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title"
-                                            required />
-                                        <InputLabel for="title" value="Titulo del secreto" />
-
-                                        <TextareaInput id="content" type="text" class="mt-1 block w-full"
-                                            v-model="form.content" required />
-                                        <InputLabel for="content" value="Contenido secreto" />
-
-
-                                        <div class="col-md-12 bg-light text-right">
-                                            <PrimaryButton class="mt-5">
-                                                Crear secreto
-                                            </PrimaryButton>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
                         </div>
-                        <SecretsTable :secrets="secrets" :onShow="showSecret"/>
+                        <SecretsTable :secrets="secrets" :onShow="showSecret" />
                     </div>
                 </div>
             </div>
@@ -202,7 +179,7 @@ onMounted(charge)
     text-decoration: none;
     cursor: pointer;
 }
-#successModal{
-    display:none
-}
-</style>
+
+#successModal {
+    display: none
+}</style>
