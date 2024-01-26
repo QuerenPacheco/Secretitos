@@ -22,7 +22,7 @@ const props = defineProps(['secrets', 'onShow']);
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="secret in this.secrets" :key="secret.id" class="bg-white border-b dark:hover:bg-blue-100">
+                <tr v-for="secret in secrets" :key="secret.id" class="bg-white border-b dark:hover:bg-blue-100">
                     <td class="px-6 py-4">
                         {{ secret.title }}
                     </td>

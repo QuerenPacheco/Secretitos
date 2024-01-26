@@ -26,7 +26,7 @@ const submit = () => {
 </script>
 
 <template>
-    <div v-if="this.isOpen" class="modal">
+    <div v-if="isOpen" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" @click="onClose()">&times;</span>
