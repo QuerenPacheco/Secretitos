@@ -31,7 +31,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        return response()->json(['mensaje' => 'Hola desde el método __invoke']);
+        return response()->json(['mensaje' => $request->input('email')]);
 
     }
 }

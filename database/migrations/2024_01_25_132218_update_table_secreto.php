@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('secreto', function (Blueprint $table) {
+        Schema::table('secretos', function (Blueprint $table) {
             // Nombre de la columna para la clave foránea (puedes cambiarlo según tu necesidad)
             $table->unsignedBigInteger('user_id');
 
@@ -25,7 +25,7 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::table('secreto', function (Blueprint $table) {
+        Schema::table('secretos', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
         });

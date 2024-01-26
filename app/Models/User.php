@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];
 
     public function secrets(){
-        return $this->hasMany('App\Models\Secretos');
+        return $this->hasMany('App\Models\Secreto');
     }
 
     

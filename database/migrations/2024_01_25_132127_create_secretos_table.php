@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('secreto', function (Blueprint $table) {
+        Schema::create('secretos', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('content')->max('400');
