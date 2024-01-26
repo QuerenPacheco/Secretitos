@@ -42,3 +42,6 @@ corto período antes de desaparecer permanentemente.
  - Soporte multilenguaje
  - Proyectos front y back independientes
  - Testing
+
+# Demo
+![demo.gif](doc%2Fdemo.gif)
