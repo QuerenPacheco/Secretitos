@@ -7,7 +7,7 @@ import { onMounted, ref } from 'vue'
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import TextareaInput from '@/Components/TextareaInput.vue';
-
+import SecretsTable from '@/Components/SecretsTable.vue';
 
 const showModal = ref(false);
 const secrets = ref();
@@ -37,6 +37,7 @@ const submit = () => {
             },
     });
 };
+
 
 const showSecret = (id) => {
     fetch('/showSecret/'+id, {
@@ -158,38 +159,7 @@ onMounted(charge)
                                 </div>
                             </div>
                         </div>
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-blue-700 dark:text-white">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Título
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Contenido
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            <span class="sr-only">Mostrar</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="sec in secrets" :key="sec.id"
-                                        class="bg-white border-b dark:hover:bg-blue-100">
-                                        <td class="px-6 py-4">
-                                            {{ sec.title }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ sec.content }}
-                                        </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                                @click="showSecret(sec.id)">Mostrar</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <SecretsTable :secrets="secrets" :onShow="showSecret"/>
                     </div>
                 </div>
             </div>
